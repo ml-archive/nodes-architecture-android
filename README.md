@@ -1,10 +1,21 @@
 # Nodes architectural
 This library contains interfaces and base classes for architectural elements.
 
+  * [Interactors (Clean architecture)](#interactors-clean-architecture)
+	 * [Interactor sample](#interactor-sample)
+		* [The Executor](#the-executor)
+  * [MVP (Model-View-Presenter)](#mvp-model-view-presenter)
+	 * [Usage](#usage)
+		* [The Contract](#the-contract)
+		* [The View](#the-view)
+		* [The Presenter](#the-presenter)
+  * [Gradle Dependency](#gradle-dependency)
+
+
 ## Interactors (Clean architecture)
 [Base classes and interfaces](app/src/main/java/dk/nodes/arch/domain/interactor)
 
-### Interactor sample
+### Sample usage
 The sample below simply adds two numbers together.
  
 Interactors should be considered use cases operating on pure domain (business) logic. 
@@ -75,7 +86,7 @@ available:
 ## MVP (Model-View-Presenter)
 [Base classes and interfaces](app/src/main/java/dk/nodes/arch/presentation/mvp)
 
-### Usage
+### Sample usage
 Following demonstrates the basic usage of the MVP baseclasses. In real working code you should inject dependencies with a
 dependency injection framework like dagger or factory methods (providers).
 
