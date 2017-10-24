@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
+apply from: 'maven-push.gradle'
 
 android {
     compileSdkVersion 26
@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "0.1"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -27,6 +27,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    implementation 'javax.inject:javax.inject:1'
+
     implementation "com.android.support:appcompat-v7:26.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
@@ -43,7 +45,7 @@ task installArchives(type: Upload) {
         mavenDeployer {
             pom.groupId = 'dk.nodes.arch'
             pom.artifactId = 'base'
-            pom.version = '0.1-LOCAL'
+            pom.version = '1.0.0-LOCAL'
             repository url: repositories.mavenLocal().url
         }
     }
