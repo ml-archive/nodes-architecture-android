@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -45,7 +45,7 @@ task installArchives(type: Upload) {
         mavenDeployer {
             pom.groupId = 'dk.nodes.arch'
             pom.artifactId = 'base'
-            pom.version = '1.0.0-LOCAL'
+            pom.version = 'LOCAL'
             repository url: repositories.mavenLocal().url
         }
     }

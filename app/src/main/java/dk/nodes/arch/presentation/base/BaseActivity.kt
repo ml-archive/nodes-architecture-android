@@ -3,7 +3,7 @@ package dk.nodes.arch.presentation.base
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
-abstract class BaseActivity<V> : AppCompatActivity(), BaseView {
+abstract class BaseActivity : AppCompatActivity(), BaseView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
