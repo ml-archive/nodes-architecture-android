@@ -4,7 +4,7 @@ import android.arch.lifecycle.Lifecycle
 
 
 interface BasePresenter<in V> {
-    fun onViewAttached(view: V, lifecycle: Lifecycle)
+    fun onViewCreated(view: V, lifecycle: Lifecycle)
 
     fun onStart()
 

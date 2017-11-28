@@ -3,15 +3,14 @@ package dk.nodes.arch.presentation.base
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import dk.nodes.arch.presentation.mvp.ViewAction
 import java.util.concurrent.LinkedBlockingQueue
 
 abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
-    private val cachedViewActions = LinkedBlockingQueue<ViewAction<V>>()
+    private val cachedViewActions = LinkedBlockingQueue<Runnable>()
     protected var view: V? = null
     protected var lifecycle: Lifecycle? = null
 
-    override fun onViewAttached(view: V, lifecycle: Lifecycle) {
+    override fun onViewCreated(view: V, lifecycle: Lifecycle) {
         this.view = view
         this.lifecycle = lifecycle
 
@@ -26,7 +25,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     override fun onResume() {
         while (!cachedViewActions.isEmpty() && view != null) {
-            view?.let { cachedViewActions.poll().run(it) }
+            view?.let { cachedViewActions.poll().run() }
         }
     }
 
@@ -42,17 +41,29 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     override fun onViewDetached() {
         view = null
-        cachedViewActions?.clear()
+        cachedViewActions.clear()
         lifecycle?.removeObserver(this)
     }
 
-    fun run(action: ViewAction<V>) {
+    fun runAction(runnable : Runnable) {
         if (view != null) {
             view?.let {
-                action.run(it)
+                runnable.run()
             }
         } else {
-            cachedViewActions.add(action)
+            cachedViewActions.add(runnable)
+        }
+    }
+
+    fun runAction(action : (V) -> Unit) {
+        if (view != null) {
+            view?.let {
+                action(it)
+            }
+        } else {
+            cachedViewActions.add(Runnable {
+                action(view!!)
+            })
         }
     }
 }
