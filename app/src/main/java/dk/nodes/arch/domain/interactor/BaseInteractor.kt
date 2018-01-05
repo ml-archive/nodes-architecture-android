@@ -14,8 +14,8 @@ abstract class BaseInteractor(protected val executor: Executor) : Interactor {
             }
             catch (t : Throwable)
             {
-                //Log.e("BaseInteractor", "Uncaught throwable in thread ${Thread.currentThread()?.name}")
-                //t.printStackTrace()
+                Log.e("BaseInteractor", "Uncaught throwable in thread ${Thread.currentThread()?.name}")
+                Log.e("BaseInteractor", Log.getStackTraceString(t))
                 submitToHockey(t)
             }
         })
@@ -30,21 +30,22 @@ abstract class BaseInteractor(protected val executor: Executor) : Interactor {
 
     fun submitToHockey(t : Throwable)
     {
-        val exceptionHandlerCls = Class.forName("net.hockeyapp.android.ExceptionHandler")
-        if(exceptionHandlerCls == null)
+        try {
+            val exceptionHandlerCls = Class.forName("net.hockeyapp.android.ExceptionHandler")
+            try {
+                val default_handler = exceptionHandlerCls.cast(Thread.getDefaultUncaughtExceptionHandler())
+                val method = exceptionHandlerCls.getMethod("uncaughtException", Thread::class.java, Throwable::class.java)
+                method.invoke(default_handler, Thread.currentThread(), t)
+            }
+            catch(ex : ClassCastException)
+            {
+                //e.printStackTrace()
+                Log.e("BaseInteractor", "Could not get HockeySDK uncaught exception handler")
+            }
+        }
+        catch (e : ClassNotFoundException)
         {
             Log.e("BaseInteractor", "Could not load HockeyApp SDK Classes, cannot record crash")
-        }
-
-        try {
-            val default_handler = exceptionHandlerCls.cast(Thread.getDefaultUncaughtExceptionHandler())
-            val method = exceptionHandlerCls.getMethod("uncaughtException", Thread::class.java, Throwable::class.java)
-            method.invoke(default_handler, Thread.currentThread(), t)
-        }
-        catch(e : ClassCastException)
-        {
-            e.printStackTrace()
-            Log.e("BaseInteractor", "Could not get HockeySDK uncaught exception handler")
         }
     }
 }
