@@ -37,4 +37,12 @@ class ThreadExecutor : Executor {
     override fun execute(runnable: Runnable) {
         threadPoolExecutor.submit(runnable)
     }
+
+    override fun sleepUntilSignalled(condId: String, timeout: Long) {
+        SignalDispatcher.sleepUntilSignalled(condId, timeout)
+    }
+
+    override fun signal(condId: String) {
+        SignalDispatcher.signal(condId)
+    }
 }

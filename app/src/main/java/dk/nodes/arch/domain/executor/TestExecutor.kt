@@ -12,4 +12,10 @@ class TestExecutor : Executor {
     override fun execute(runnable: Runnable) {
         runnable.run()
     }
+
+    override fun sleepUntilSignalled(condId: String, timeout: Long) {
+        return
+    }
+
+    override fun signal(condId: String) {}
 }

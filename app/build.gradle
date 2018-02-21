@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "1.1.4"
+        versionName "1.1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,8 +32,8 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19.1'
 
-    implementation "android.arch.lifecycle:runtime:1.0.3" // not necessary if you are using lifecycle:extensions or lifecycle:common-java8
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0" // not needed if you are using the DefaultLifecycleObserver from common-java8 artifact.
+    implementation "android.arch.lifecycle:runtime:1.1.0" // not necessary if you are using lifecycle:extensions or lifecycle:common-java8
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.0" // not needed if you are using the DefaultLifecycleObserver from common-java8 artifact.
     // java 8 stuff
     //implementation "android.arch.lifecycle:common-java8:1.0.0"
 }

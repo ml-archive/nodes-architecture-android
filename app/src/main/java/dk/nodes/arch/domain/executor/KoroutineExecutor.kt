@@ -21,4 +21,12 @@ class KoroutineExecutor : Executor {
             runnable.run()
         }
     }
+
+    override fun sleepUntilSignalled(condId: String, timeout: Long) {
+        SignalDispatcher.sleepUntilSignalled(condId, timeout)
+    }
+
+    override fun signal(condId: String) {
+        SignalDispatcher.signal(condId)
+    }
 }
