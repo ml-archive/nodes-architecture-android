@@ -1,6 +1,41 @@
 # Nodes architectural
 This library contains interfaces and base classes for architectural elements.
 
+## New in version 1.1.7
+
+### Signal dispatch
+Simple signal dispatch feature. Interactor can now ask its executor to sleep until a signal arrive.
+
+Image your interactor is running but need to write to external storage. Permissions requests are an
+asynchronous operation, but it should happen immediately before the permission is needed.
+An example use of the signal dispatch feature could be for the interactor to wait for a permission
+request to complete.
+
+To go to sleep in the interactor:
+
+```kotlin
+executor.sleepUntilSignalled("permissionRequestDone")
+```
+
+Specify an optional timeout in ms as the second parameter.
+Whenever you want the interactor to wake up and resume its operation
+
+```kotlin
+executor.signal("permissionRequestDone")
+// interactor woke up, check the result of whatever we were waiting for and continue
+```
+
+### guard()
+It's the opposite of let:
+
+```kotlin
+nullableVar?.guard {
+	myFancyErrorHandling()
+}
+```
+
+
+## Usage
   * [Interactors (Clean architecture)](#interactors-clean-architecture)
 	 * [Interactor sample](#interactor-sample)
 		* [The Executor](#the-executor)
