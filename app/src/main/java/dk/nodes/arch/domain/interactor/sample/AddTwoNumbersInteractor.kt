@@ -12,7 +12,7 @@ import dk.nodes.arch.domain.interactor.Interactor
  * (much like an asynctask)
  */
 interface AddTwoNumbersInteractor : Interactor {
-    fun setOutput(output : Output)
+    fun setOutput(output: Output)
     fun setInput(input: Input)
 
     /*
@@ -28,6 +28,6 @@ interface AddTwoNumbersInteractor : Interactor {
         This interface is used to communicate results (and errors) back to the client (presenter)
      */
     interface Output {
-        fun onAddTwoNumbersResult(result : Int)
+        fun onAddTwoNumbersResult(result: Int)
     }
 }

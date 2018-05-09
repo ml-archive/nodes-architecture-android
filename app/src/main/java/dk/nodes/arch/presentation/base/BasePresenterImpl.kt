@@ -45,7 +45,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         lifecycle?.removeObserver(this)
     }
 
-    fun runAction(runnable : Runnable) {
+    fun runAction(runnable: Runnable) {
         if (view != null) {
             view?.let {
                 runnable.run()
@@ -55,7 +55,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         }
     }
 
-    fun runAction(action : (V) -> Unit) {
+    fun runAction(action: (V) -> Unit) {
         if (view != null) {
             view?.let {
                 action(it)
