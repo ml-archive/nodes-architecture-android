@@ -2,6 +2,7 @@ package dk.nodes.arch.domain.interactor
 
 import android.util.Log
 import dk.nodes.arch.domain.executor.Executor
+
 /**
  * Created by bison on 24-06-2017.
  */
@@ -11,9 +12,7 @@ abstract class BaseInteractor(protected val executor: Executor) : Interactor {
         executor.execute(Runnable {
             try {
                 execute()
-            }
-            catch (t : Throwable)
-            {
+            } catch (t: Throwable) {
                 Log.e("BaseInteractor", "Uncaught throwable in thread ${Thread.currentThread()?.name}")
                 Log.e("BaseInteractor", Log.getStackTraceString(t))
                 submitToHockey(t)
@@ -21,30 +20,24 @@ abstract class BaseInteractor(protected val executor: Executor) : Interactor {
         })
     }
 
-    fun runOnUIThread(code: () -> Unit)
-    {
+    fun runOnUIThread(code: () -> Unit) {
         executor.runOnUIThread(code)
     }
 
     abstract fun execute()
 
-    fun submitToHockey(t : Throwable)
-    {
+    fun submitToHockey(t: Throwable) {
         try {
             val exceptionHandlerCls = Class.forName("net.hockeyapp.android.ExceptionHandler")
             try {
                 val default_handler = exceptionHandlerCls.cast(Thread.getDefaultUncaughtExceptionHandler())
                 val method = exceptionHandlerCls.getMethod("uncaughtException", Thread::class.java, Throwable::class.java)
                 method.invoke(default_handler, Thread.currentThread(), t)
-            }
-            catch(ex : ClassCastException)
-            {
+            } catch (ex: ClassCastException) {
                 //e.printStackTrace()
                 Log.e("BaseInteractor", "Could not get HockeySDK uncaught exception handler")
             }
-        }
-        catch (e : ClassNotFoundException)
-        {
+        } catch (e: ClassNotFoundException) {
             Log.e("BaseInteractor", "Could not load HockeyApp SDK Classes, cannot record crash")
         }
     }

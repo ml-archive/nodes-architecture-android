@@ -6,9 +6,9 @@ import dk.nodes.arch.domain.interactor.BaseInteractor
 /**
  * Created by bison on 10/10/17.
  */
-class AddTwoNumbersInteractorImpl(executor: Executor) : AddTwoNumbersInteractor, BaseInteractor(executor)  {
-    private var output : AddTwoNumbersInteractor.Output? = null
-    private var input : AddTwoNumbersInteractor.Input? = null
+class AddTwoNumbersInteractorImpl(executor: Executor) : AddTwoNumbersInteractor, BaseInteractor(executor) {
+    private var output: AddTwoNumbersInteractor.Output? = null
+    private var input: AddTwoNumbersInteractor.Input? = null
 
     override fun setOutput(output: AddTwoNumbersInteractor.Output) {
         this.output = output

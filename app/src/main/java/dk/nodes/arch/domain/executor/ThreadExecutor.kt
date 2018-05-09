@@ -25,7 +25,7 @@ class ThreadExecutor : Executor {
     private var threadPoolExecutor: ThreadPoolExecutor
 
     init {
-        val keepAlive : Long = KEEP_ALIVE_TIME.toLong()
+        val keepAlive: Long = KEEP_ALIVE_TIME.toLong()
         threadPoolExecutor = ThreadPoolExecutor(
                 CORE_POOL_SIZE,
                 MAX_POOL_SIZE,

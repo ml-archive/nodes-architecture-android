@@ -9,15 +9,13 @@ import kotlinx.coroutines.experimental.launch
  */
 class KoroutineExecutor : Executor {
     override fun runOnUIThread(code: () -> Unit) {
-        launch(UI)
-        {
+        launch(UI) {
             code()
         }
     }
 
     override fun execute(runnable: Runnable) {
-        launch(CommonPool)
-        {
+        launch(CommonPool) {
             runnable.run()
         }
     }
