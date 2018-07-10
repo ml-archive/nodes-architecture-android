@@ -1,11 +1,12 @@
 package dk.nodes.arch.presentation.base
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import java.util.concurrent.LinkedBlockingQueue
 
 abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
+
     private val cachedViewActions = LinkedBlockingQueue<Runnable>()
     protected var view: V? = null
     protected var lifecycle: Lifecycle? = null
@@ -16,6 +17,8 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
 
         lifecycle.addObserver(this)
     }
+
+
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     override fun onStart() {
