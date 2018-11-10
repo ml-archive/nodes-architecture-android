@@ -5,12 +5,12 @@ package dk.nodes.arch.domain.executor
  * Singlethreaded executer used for unit testing interactors
  */
 class TestExecutor : Executor {
-    override fun runOnUIThread(code: () -> Unit) {
-        code()
+    override fun runOnUIThread(block: () -> Unit) {
+        block.invoke()
     }
 
-    override fun execute(runnable: Runnable) {
-        runnable.run()
+    override fun execute(block: () -> Unit) {
+        block.invoke()
     }
 
     override fun sleepUntilSignalled(condId: String, timeout: Long) {

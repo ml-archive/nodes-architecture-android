@@ -4,12 +4,12 @@ package dk.nodes.arch.domain.executor
  * Created by bison on 26/07/17.
  */
 interface Executor {
-    fun execute(runnable: Runnable)
+    fun execute(block: () -> Unit)
 
     /**
      * Pretty much what it says it does, runs the closure on the ui thread (on android mainlooper)
      */
-    fun runOnUIThread(code: () -> Unit)
+    fun runOnUIThread(block: () -> Unit)
 
     /**
      * Blocks the calling interactor thread until it its notified by another thread

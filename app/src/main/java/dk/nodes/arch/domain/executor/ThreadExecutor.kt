@@ -10,9 +10,9 @@ import java.util.concurrent.TimeUnit
  * Created by bison on 26/07/17.
  */
 class ThreadExecutor : Executor {
-    override fun runOnUIThread(code: () -> Unit) {
+    override fun runOnUIThread(block: () -> Unit) {
         Handler(Looper.getMainLooper()).post({
-            code()
+            block()
         })
     }
 
@@ -34,8 +34,8 @@ class ThreadExecutor : Executor {
                 WORK_QUEUE)
     }
 
-    override fun execute(runnable: Runnable) {
-        threadPoolExecutor.submit(runnable)
+    override fun execute(block: () -> Unit) {
+        threadPoolExecutor.submit(block)
     }
 
     override fun sleepUntilSignalled(condId: String, timeout: Long) {

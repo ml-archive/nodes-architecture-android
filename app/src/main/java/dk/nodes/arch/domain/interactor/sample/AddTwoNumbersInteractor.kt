@@ -11,9 +11,8 @@ import dk.nodes.arch.domain.interactor.Interactor
  * Interactors always run in the background and usually publish their results to the mainthread
  * (much like an asynctask)
  */
-interface AddTwoNumbersInteractor : Interactor {
+interface AddTwoNumbersInteractor : Interactor<AddTwoNumbersInteractor.Input> {
     fun setOutput(output: Output)
-    fun setInput(input: Input)
 
     /*
         This contain whatever inputs the interactor needs to complete its job, it is set before a call to run()
