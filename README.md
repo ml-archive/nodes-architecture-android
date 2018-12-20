@@ -1,7 +1,7 @@
 # Nodes architectural
 This library contains interfaces and base classes for architectural elements.
 
-## New in version 1.1.7
+## New in version 3.0.0
 
 ### Signal dispatch
 Simple signal dispatch feature. Interactor can now ask its executor to sleep until a signal arrive.
@@ -22,7 +22,7 @@ Whenever you want the interactor to wake up and resume its operation
 
 ```kotlin
 executor.signal("permissionRequestDone")
-// interactor woke up, check the result of whatever we were waiting for and continue
+// interactor woke up, check the result of whatever we were waiting for and continuef
 ```
 
 ### guard()
@@ -39,11 +39,6 @@ nullableVar?.guard {
   * [Interactors (Clean architecture)](#interactors-clean-architecture)
 	 * [Interactor sample](#interactor-sample)
 		* [The Executor](#the-executor)
-  * [MVP (Model-View-Presenter)](#mvp-model-view-presenter)
-	 * [Usage](#usage)
-		* [The Contract](#the-contract)
-		* [The View](#the-view)
-		* [The Presenter](#the-presenter)
   * [Gradle Dependency](#gradle-dependency)
 
 
@@ -116,107 +111,6 @@ available:
 - [ThreadPool executor](app/src/main/java/dk/nodes/arch/domain/executor/ThreadExecutor.kt) Uses JDK ThreadPoolExecutor
 - [Coroutine executor](app/src/main/java/dk/nodes/arch/domain/executor/KoroutineExecutor.kt) Uses kotlin coroutines
 - [Test executor](app/src/main/java/dk/nodes/arch/domain/executor/TestExecutor.kt) This runs everything on the mainthread, useful for testing.
-
-
-## MVP (Model-View-Presenter)
-[Base classes and interfaces](app/src/main/java/dk/nodes/arch/presentation/mvp)
-
-### Sample usage
-Following demonstrates the basic usage of the MVP baseclasses. In real working code you should inject dependencies with a
-dependency injection framework like dagger or factory methods (providers).
-
-Our example - CalcView - is a view which presents the result of two numbers being added together (exciting stuff) 
-
-#### The Contract
-This file contain the abstract interfaces for the view and the presenter, in a neat parent class. The interfaces
-could just as well be split into two files depending on preference.
-
-Source: [CalcContract.kt](app/src/main/java/dk/nodes/arch/presentation/sample/CalcContract.kt)
-
-```kotlin
-interface CalcContract {
-    interface View : MvpView {
-        fun showResult(result : Int)
-    }
-    interface Presenter : MvpPresenter<CalcContract.View> {
-    }
-}
-```
-
-#### The View
-The view implementation in this sample shows the results of the addition of two numbers, in some way
-we don't care about. In Android this class is usually an Activity or a Fragment (or another class derived from ViewGroup).
-The interactor and executor should be injected or instantiated with a factory function in production code.
-
-Source: [CalcView.kt](app/src/main/java/dk/nodes/arch/presentation/sample/CalcView.kt)
-
-```kotlin
-class CalcView : CalcContract.View, Activity() {
-
-    private lateinit var presenter : CalcContract.Presenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter = CalcPresenter(AddTwoNumbersInteractorImpl(ThreadExecutor()))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!isChangingConfigurations) {
-            presenter.onPresenterDestroyed()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.attachView(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.detachView()
-    }
-
-    override fun showResult(result: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-}
-```
-
-#### The Presenter
-The Presenter implementation is derived from the interface in it's contract (CalcContract.Presenter) and MvpBasePresenter for some
-general plumbing and providing default implementations of onAttach and onDetach. The Interactor is constructor injected so it
-can easily be mocked in a test situation.
-
-The addNumbers function uses the interactor in the earlier example two perform the cutting edge addition of two integers in
-a background task. The result of this intensive number crunching is then delivered with an anonymous object implementing the interactor
-output. The presenter itself could also have derived the AddTwoNumbersInteractor.Output interface to avoid the closure.
-
-Source: [CalcPresenter.kt](app/src/main/java/dk/nodes/arch/presentation/sample/CalcPresenter.kt)
-
-```kotlin
-class CalcPresenter(val addTwoNumbersInteractor: AddTwoNumbersInteractor) : CalcContract.Presenter, MvpBasePresenter<CalcContract.View>() {
-    override fun attachView(view: CalcContract.View) {
-        super.attachView(view)
-        addNumbers()
-    }
-
-    fun addNumbers()
-    {
-        // set input
-        addTwoNumbersInteractor.setInput(AddTwoNumbersInteractor.Input(20, 30))
-        // set output
-        addTwoNumbersInteractor.setOutput(object : AddTwoNumbersInteractor.Output {
-            override fun onAddTwoNumbersResult(result: Int) {
-                if(isViewAttached)
-                    view?.showResult(result)
-            }
-        })
-        // schedules and runs the interactor in the background
-        addTwoNumbersInteractor.run()
-    }
-}
-```
 
 ## Gradle Dependency
 ```groovy
