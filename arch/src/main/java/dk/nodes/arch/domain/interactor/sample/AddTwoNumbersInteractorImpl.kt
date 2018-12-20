@@ -1,5 +1,6 @@
 package dk.nodes.arch.domain.interactor.sample
 
+import dk.nodes.arch.domain.interactor.Result
 import dk.nodes.arch.util.AppCoroutineDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 
@@ -15,6 +16,6 @@ class AddTwoNumbersInteractorImpl(
         executeParams: AddTwoNumbersInteractor.Input,
         onResult: (Result<Int>) -> Unit
     ) {
-        onResult.invoke(Result.success(executeParams.firstNumber + executeParams.secondNumber))
+        onResult.invoke(Result.Success(executeParams.firstNumber + executeParams.secondNumber))
     }
 }
