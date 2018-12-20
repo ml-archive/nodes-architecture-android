@@ -12,7 +12,7 @@ fun <T : Any> safeCall(call: () -> T, errorMessage: String, onResult: (Result<T>
         onResult.invoke(Result.Success(value))
     } catch (e: Exception) {
         // An exception was thrown when calling, so we're converting this to an IOException
-        onResult.invoke(Result.Error(IOException(errorMessage, e)))
+        onResult.invoke(Result.Failure(IOException(errorMessage, e)))
     }
 }
 
@@ -26,6 +26,6 @@ suspend fun <T : Any> safeSuspendCall(
         onResult.invoke(Result.Success(value))
     } catch (e: Exception) {
         // An exception was thrown when calling, so we're converting this to an IOException
-        onResult.invoke(Result.Error(IOException(errorMessage, e)))
+        onResult.invoke(Result.Failure(IOException(errorMessage, e)))
     }
 }
