@@ -6,14 +6,12 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
-/**
- * Created by bison on 26/07/17.
- */
 class ThreadExecutor : Executor {
-    override fun runOnUIThread(code: () -> Unit) {
-        Handler(Looper.getMainLooper()).post({
-            code()
-        })
+
+    override fun runOnUIThread(block: () -> Unit) {
+        Handler(Looper.getMainLooper()).post {
+            block()
+        }
     }
 
     val CORE_POOL_SIZE = 3

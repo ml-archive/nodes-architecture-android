@@ -2,10 +2,8 @@ package dk.nodes.arch.domain.executor
 
 import android.os.ConditionVariable
 
-/**
- * Created by bison on 21-02-2018.
- */
 object SignalDispatcher {
+
     private val activeSignalMap: MutableMap<String, ConditionVariable> = HashMap()
 
     fun sleepUntilSignalled(condId: String, timeout: Long = 0) {

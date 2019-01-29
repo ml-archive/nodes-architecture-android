@@ -6,6 +6,7 @@ import android.arch.lifecycle.OnLifecycleEvent
 import java.util.concurrent.LinkedBlockingQueue
 
 abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
+
     private val cachedViewActions = LinkedBlockingQueue<Runnable>()
     protected var view: V? = null
     protected var lifecycle: Lifecycle? = null
@@ -65,5 +66,9 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
                 action(view!!)
             })
         }
+    }
+
+    fun view(block: V.() -> Unit) {
+        view?.let(block) ?: cachedViewActions.add(Runnable { view?.block() })
     }
 }
