@@ -68,7 +68,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         }
     }
 
-    fun callOnView(block: V.() -> Unit) {
+    fun view(block: V.() -> Unit) {
         view?.let(block) ?: cachedViewActions.add(Runnable { view?.block() })
     }
 }
