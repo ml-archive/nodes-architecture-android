@@ -3,8 +3,6 @@ package dk.nodes.arch.domain.interactor.sample
 import dk.nodes.arch.domain.interactor.Interactor
 
 /**
- * Created by bison on 10/10/17.
- *
  * This is a sample of how to use the interactor base classes to implement a new interactor
  * In this case its simply adds together two numbers specified in the Input data class
  *
@@ -12,8 +10,9 @@ import dk.nodes.arch.domain.interactor.Interactor
  * (much like an asynctask)
  */
 interface AddTwoNumbersInteractor : Interactor {
-    fun setOutput(output: Output)
+
     fun setInput(input: Input)
+    fun setOutput(output: Output)
 
     /*
         This contain whatever inputs the interactor needs to complete its job, it is set before a call to run()

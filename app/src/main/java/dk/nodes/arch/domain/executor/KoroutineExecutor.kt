@@ -1,23 +1,16 @@
 package dk.nodes.arch.domain.executor
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import dk.nodes.arch.extensions.launch
+import dk.nodes.arch.extensions.launchOnUI
 
-/**
- * Created by bison on 26/07/17.
- */
 class KoroutineExecutor : Executor {
-    override fun runOnUIThread(code: () -> Unit) {
-        launch(UI) {
-            code()
-        }
+
+    override fun runOnUIThread(block: () -> Unit) {
+        launchOnUI { block() }
     }
 
     override fun execute(runnable: Runnable) {
-        launch(CommonPool) {
-            runnable.run()
-        }
+        launch { runnable.run() }
     }
 
     override fun sleepUntilSignalled(condId: String, timeout: Long) {
