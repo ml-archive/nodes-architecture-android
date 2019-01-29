@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.2.0"
+        versionCode 6
+        versionName "2.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,21 +24,24 @@ android {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
-
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    def androidx_support_library_version  = "2.0.0"
 
     implementation 'javax.inject:javax.inject:1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
 
-    implementation "android.arch.lifecycle:runtime:1.1.1" // not necessary if you are using lifecycle:extensions or lifecycle:common-java8
-    kapt "android.arch.lifecycle:compiler:1.1.1" // not needed if you are using the DefaultLifecycleObserver from common-java8 artifact.
+    implementation "androidx.lifecycle:lifecycle-runtime:$androidx_support_library_version" // not necessary if you are using lifecycle:extensions or lifecycle:common-java8
+    kapt "androidx.lifecycle:lifecycle-compiler:$androidx_support_library_version" // not needed if you are using the DefaultLifecycleObserver from common-java8 artifact.
+
     // java 8 stuff
-    //implementation "android.arch.lifecycle:common-java8:1.0.0"
+    //implementation "androidx.lifecycle:lifecycle-common-java8:$androidx_support_library_version"
+
+    //testImplementation 'junit:junit:4.12'
+
+    //androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
+    //    exclude group: 'com.android.support', module: 'support-annotations'
+    //})
 }
 
 apply plugin: 'maven'
