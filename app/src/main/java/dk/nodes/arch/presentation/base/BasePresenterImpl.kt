@@ -108,16 +108,16 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         defaultCoroutineContext = mainThreadSurrogate + job
     }
 
-    fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
-        mainScope.launch(context = mainCoroutineContext, block = block)
+    fun launchOnUI(block: suspend CoroutineScope.() -> Unit): Job {
+        return mainScope.launch(context = mainCoroutineContext, block = block)
     }
 
-    fun launchOnIO(block: suspend CoroutineScope.() -> Unit) {
-        ioScope.launch(context = mainCoroutineContext, block = block)
+    fun launchOnIO(block: suspend CoroutineScope.() -> Unit): Job {
+        return ioScope.launch(context = mainCoroutineContext, block = block)
     }
 
-    fun launch(block: suspend CoroutineScope.() -> Unit) {
-        defaultScope.launch(context = defaultCoroutineContext, block = block)
+    fun launch(block: suspend CoroutineScope.() -> Unit): Job {
+        return defaultScope.launch(context = defaultCoroutineContext, block = block)
     }
 
     fun <T> asyncOnUI(block: suspend CoroutineScope.() -> T): Deferred<T>  {
