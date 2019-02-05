@@ -12,7 +12,7 @@ allprojects { ext."signing.password" = System.getenv('password') }
 
 // Artifact settings
 def _group = 'dk.nodes.arch'
-def _version = '2.2.0'
+def _version = '2.2.1'
 def _archivesBaseName = 'base'
 
 def _name = 'Nodes Architecture Library'
