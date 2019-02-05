@@ -4,6 +4,10 @@ import androidx.lifecycle.Lifecycle
 
 interface BasePresenter<in V> {
 
+    fun onCreate()
+
+    fun onCreateView(lifecycle: Lifecycle)
+
     fun onViewCreated(view: V, lifecycle: Lifecycle)
 
     fun onStart()
