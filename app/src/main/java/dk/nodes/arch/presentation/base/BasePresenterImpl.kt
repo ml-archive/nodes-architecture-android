@@ -33,7 +33,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
 
     private val defaultScope = CoroutineScope(defaultCoroutineContext)
 
-    override fun onCreateView(lifecycle: Lifecycle) {
+    override fun onCreate(view: V, lifecycle: Lifecycle) {
         this.lifecycle = lifecycle
 
         lifecycle.addObserver(this)
@@ -44,11 +44,6 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         this.lifecycle = lifecycle
 
         lifecycle.addObserver(this)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    override fun onCreate() {
-
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
