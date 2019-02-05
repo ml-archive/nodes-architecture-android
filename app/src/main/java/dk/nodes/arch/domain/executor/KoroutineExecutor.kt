@@ -1,7 +1,11 @@
 package dk.nodes.arch.domain.executor
 
-import dk.nodes.arch.extensions.launch
-import dk.nodes.arch.extensions.launchOnUI
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 class KoroutineExecutor : Executor {
 
@@ -20,4 +24,12 @@ class KoroutineExecutor : Executor {
     override fun signal(condId: String) {
         SignalDispatcher.signal(condId)
     }
+
+    private fun launch(
+        context: CoroutineContext = EmptyCoroutineContext,
+        block: suspend CoroutineScope.() -> Unit
+    ) = GlobalScope.launch(context = context, block = block)
+
+    private fun launchOnUI(block: suspend CoroutineScope.() -> Unit) =
+        launch(context = Dispatchers.Main, block = block)
 }
