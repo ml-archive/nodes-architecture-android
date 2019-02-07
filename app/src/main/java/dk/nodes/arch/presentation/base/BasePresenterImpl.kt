@@ -3,15 +3,20 @@ package dk.nodes.arch.presentation.base
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Delay
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.resume
 
 abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
 
@@ -101,19 +106,12 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         view?.let(block) ?: cachedViewActions.add(Runnable { view?.block() })
     }
 
-    fun activateTestMode() {
-        val mainThreadSurrogate = newSingleThreadContext("Single thread context")
-        mainCoroutineContext = mainThreadSurrogate + job
-        ioCoroutineContext = mainThreadSurrogate + job
-        defaultCoroutineContext = mainThreadSurrogate + job
-    }
-
     fun launchOnUI(block: suspend CoroutineScope.() -> Unit): Job {
         return mainScope.launch(context = mainCoroutineContext, block = block)
     }
 
     fun launchOnIO(block: suspend CoroutineScope.() -> Unit): Job {
-        return ioScope.launch(context = mainCoroutineContext, block = block)
+        return ioScope.launch(context = ioCoroutineContext, block = block)
     }
 
     fun launch(block: suspend CoroutineScope.() -> Unit): Job {
@@ -132,4 +130,36 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         return defaultScope.async(context = defaultCoroutineContext, block = block)
     }
 
+    override fun activateTestMode(context: CoroutineContext) {
+        mainCoroutineContext = context + job
+        ioCoroutineContext = context + job
+        defaultCoroutineContext = context + job
+    }
+
+}
+
+@InternalCoroutinesApi
+fun <T> runBlockingTest(presenter: BasePresenter<*>, block: suspend CoroutineScope.() -> T): T {
+    return runBlocking(TestContext()) {
+        presenter.activateTestMode(this.coroutineContext)
+        return@runBlocking block.invoke(this)
+    }
+}
+
+/**
+ * Temporary workaround which sets delays used in Coroutines to 0
+ * Can be replaced with Kotlin built-in solution when https://github.com/softagram/kotlinx.coroutines/pull/3 will be merged
+ * For more info see: https://github.com/Kotlin/kotlinx.coroutines/issues/541
+ * https://stackoverflow.com/a/49078296/1502079
+ * */
+@InternalCoroutinesApi
+class TestContext : CoroutineDispatcher(), Delay {
+
+    override fun scheduleResumeAfterDelay(timeMillis: Long, continuation: CancellableContinuation<Unit>) {
+        continuation.resume(Unit)
+    }
+
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        block.run()  // dispatch on calling thread
+    }
 }
