@@ -1,6 +1,7 @@
 package dk.nodes.arch.presentation.base
 
 import androidx.lifecycle.Lifecycle
+import kotlin.coroutines.CoroutineContext
 
 interface BasePresenter<in V> {
 
@@ -17,4 +18,6 @@ interface BasePresenter<in V> {
     fun onStop()
 
     fun onViewDetached()
+
+    fun activateTestMode(context: CoroutineContext)
 }
