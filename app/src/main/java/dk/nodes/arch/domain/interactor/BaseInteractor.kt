@@ -2,6 +2,7 @@ package dk.nodes.arch.domain.interactor
 
 import android.util.Log
 import dk.nodes.arch.domain.executor.Executor
+import dk.nodes.arch.domain.executor.TestExecutor
 
 abstract class BaseInteractor(protected val executor: Executor) : Interactor {
 
@@ -10,9 +11,14 @@ abstract class BaseInteractor(protected val executor: Executor) : Interactor {
             try {
                 execute()
             } catch (t: Throwable) {
-                Log.e("BaseInteractor", "Uncaught throwable in thread ${Thread.currentThread()?.name}")
-                Log.e("BaseInteractor", Log.getStackTraceString(t))
-                submitToHockey(t)
+                if (executor is TestExecutor) {
+                    throw t
+                } else {
+                    Log.e("BaseInteractor", "Uncaught throwable in thread ${Thread.currentThread()?.name}"
+                    )
+                    Log.e("BaseInteractor", Log.getStackTraceString(t))
+                    submitToHockey(t)
+                }
             }
         })
     }
