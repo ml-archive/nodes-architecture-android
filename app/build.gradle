@@ -39,6 +39,8 @@ dependencies {
     // java 8 stuff
     //implementation "androidx.lifecycle:lifecycle-common-java8:$androidx_support_library_version"
 
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     // Testing
     testImplementation 'com.github.gmazzo:okhttp-mock:1.1.0'
     testImplementation "junit:junit:4.12"
