@@ -39,6 +39,18 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
 
     private val defaultScope = CoroutineScope(defaultCoroutineContext)
 
+    override fun onViewCreated(view: V, lifecycle: Lifecycle) {
+        this.view = view
+        this.lifecycle = lifecycle
+        lifecycle.addObserver(this)
+    }
+
+    override fun onCreate(view: V, lifecycle: Lifecycle) {
+        this.lifecycle = lifecycle
+
+        lifecycle.addObserver(this)
+    }
+
     override fun onCreate(view: V, lifecycleOwner: LifecycleOwner) {
         this.lifecycle = lifecycleOwner.lifecycle
 
@@ -54,7 +66,6 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     override fun onStart() {
-
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -70,7 +81,6 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     override fun onStop() {
-
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
@@ -119,7 +129,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         return defaultScope.launch(context = defaultCoroutineContext, block = block)
     }
 
-    fun <T> asyncOnUI(block: suspend CoroutineScope.() -> T): Deferred<T>  {
+    fun <T> asyncOnUI(block: suspend CoroutineScope.() -> T): Deferred<T> {
         return mainScope.async(context = mainCoroutineContext, block = block)
     }
 
@@ -136,7 +146,6 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         ioCoroutineContext = context + job
         defaultCoroutineContext = context + job
     }
-
 }
 
 @InternalCoroutinesApi
@@ -156,7 +165,10 @@ fun <T> runBlockingTest(presenter: BasePresenter<*>, block: suspend CoroutineSco
 @InternalCoroutinesApi
 class TestContext : CoroutineDispatcher(), Delay {
 
-    override fun scheduleResumeAfterDelay(timeMillis: Long, continuation: CancellableContinuation<Unit>) {
+    override fun scheduleResumeAfterDelay(
+        timeMillis: Long,
+        continuation: CancellableContinuation<Unit>
+    ) {
         continuation.resume(Unit)
     }
 
