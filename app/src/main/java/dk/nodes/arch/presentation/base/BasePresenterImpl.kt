@@ -54,14 +54,14 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
     override fun onCreate(view: V, lifecycleOwner: LifecycleOwner) {
         this.lifecycle = lifecycleOwner.lifecycle
 
-        lifecycle!!.addObserver(this)
+        lifecycle?.addObserver(this)
     }
 
     override fun onViewCreated(view: V, lifecycleOwner: LifecycleOwner) {
         this.view = view
         this.lifecycle = lifecycleOwner.lifecycle
 
-        lifecycle!!.addObserver(this)
+        lifecycle?.addObserver(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
