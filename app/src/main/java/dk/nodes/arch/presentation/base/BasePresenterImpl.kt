@@ -2,6 +2,7 @@ package dk.nodes.arch.presentation.base
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,17 +39,17 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
 
     private val defaultScope = CoroutineScope(defaultCoroutineContext)
 
-    override fun onCreate(view: V, lifecycle: Lifecycle) {
-        this.lifecycle = lifecycle
+    override fun onCreate(view: V, lifecycleOwner: LifecycleOwner) {
+        this.lifecycle = lifecycleOwner.lifecycle
 
-        lifecycle.addObserver(this)
+        lifecycle!!.addObserver(this)
     }
 
-    override fun onViewCreated(view: V, lifecycle: Lifecycle) {
+    override fun onViewCreated(view: V, lifecycleOwner: LifecycleOwner) {
         this.view = view
-        this.lifecycle = lifecycle
+        this.lifecycle = lifecycleOwner.lifecycle
 
-        lifecycle.addObserver(this)
+        lifecycle!!.addObserver(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
