@@ -92,20 +92,17 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
     }
 
     fun runAction(runnable: Runnable) {
-        if (view != null) {
-            view?.let {
-                runnable.run()
-            }
+        if (view != null && lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED) == true) {
+            runnable.run()
         } else {
             cachedViewActions.add(runnable)
         }
     }
 
     fun runAction(action: (V) -> Unit) {
-        if (view != null) {
-            view?.let {
-                action(it)
-            }
+        val view = view
+        if (view != null && lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED) == true) {
+            action(view)
         } else {
             cachedViewActions.add(Runnable {
                 action(view!!)
@@ -114,7 +111,12 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
     }
 
     fun view(block: V.() -> Unit) {
-        view?.let(block) ?: cachedViewActions.add(Runnable { view?.block() })
+        val view = view
+        if (view != null && lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED) == true) {
+            view.block()
+        } else {
+            cachedViewActions.add(Runnable { view?.block() })
+        }
     }
 
     fun launchOnUI(block: suspend CoroutineScope.() -> Unit): Job {
