@@ -105,7 +105,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
             action(view)
         } else {
             cachedViewActions.add(Runnable {
-                action(view!!)
+                action(this@BasePresenterImpl.view!!)
             })
         }
     }
@@ -115,7 +115,7 @@ abstract class BasePresenterImpl<V> : BasePresenter<V>, LifecycleObserver {
         if (view != null && lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED) == true) {
             view.block()
         } else {
-            cachedViewActions.add(Runnable { view?.block() })
+            cachedViewActions.add(Runnable { this@BasePresenterImpl.view!!.block() })
         }
     }
 
