@@ -6,4 +6,3 @@ internal class AddTwoNumbersInteractorImpl : AddTwoNumbersInteractor {
         return AddTwoNumbersInteractor.Output(input.firstNumber + input.secondNumber)
     }
 }
-
