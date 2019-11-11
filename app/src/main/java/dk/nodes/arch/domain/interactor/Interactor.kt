@@ -6,8 +6,8 @@ interface Interactor<I, O> {
 
 suspend operator fun <O> NoInputInteractor<O>.invoke() = invoke(Unit)
 
-typealias NoInputInteractor<O> = Interactor<Unit, O>
+interface NoInputInteractor<O> : Interactor<Unit, O>
 
-typealias UnitInteractor<I> = Interactor<I, Unit>
+interface NoOutputInteractor<I> : Interactor<I, Unit>
 
-typealias EmptyInteractor = Interactor<Unit, Unit>
+interface EmptyInteractor : Interactor<Unit, Unit>

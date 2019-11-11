@@ -12,7 +12,7 @@ import kotlin.coroutines.CoroutineContext
 
 interface ResultInteractor<I, O> : Interactor<I, CompleteResult<O>>
 
-interface FlowInteractor<I, O> : UnitInteractor<I> {
+interface FlowInteractor<I, O> : NoOutputInteractor<I> {
     fun flow(): Flow<InteractorResult<O>>
 }
 
@@ -57,7 +57,7 @@ fun <I, O> Interactor<I, O>.asFlow(): FlowInteractor<I, O> {
 }
 
 fun <I> CoroutineScope.launchInteractor(
-    interactor: UnitInteractor<I>,
+    interactor: Interactor<I, Unit>,
     input: I,
     coroutineContext: CoroutineContext = Dispatchers.IO
 ) {
