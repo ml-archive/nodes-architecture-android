@@ -19,18 +19,18 @@ abstract class NodesFragment : Fragment, HasAndroidInjector {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    @Inject lateinit var injector: DispatchingAndroidInjector<Any>
+
     protected inline fun <reified VM : ViewModel> viewModel(): Lazy<VM> =
         viewModels { viewModelFactory }
 
     protected inline fun <reified VM : ViewModel> activityViewModel(): Lazy<VM> =
         activityViewModels { viewModelFactory }
 
-    @Inject internal var androidInjector: DispatchingAndroidInjector<Any>? = null
-
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
-    override fun androidInjector(): AndroidInjector<Any>? = androidInjector
+    override fun androidInjector(): AndroidInjector<Any>? = injector
 }

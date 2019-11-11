@@ -22,14 +22,14 @@ abstract class NodesActivity : ComponentActivity, HasAndroidInjector {
     protected inline fun <reified VM : ViewModel> viewModel(): Lazy<VM> =
         viewModels { viewModelFactory }
 
-    @Inject internal lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    @Inject internal lateinit var injector: DispatchingAndroidInjector<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
     }
 
-    override fun androidInjector() = androidInjector
+    override fun androidInjector() = injector
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(NStackBaseContext(newBase))
