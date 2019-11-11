@@ -34,7 +34,11 @@ dependencies {
     def lifecycle = "2.2.0-rc01",
         coroutines = "1.3.2",
         mockito_version = "2.23.4",
-        dagger = "2.25.2"
+        dagger = "2.25.2",
+        activity_version = "1.0.0",
+        fragment_version = "1.1.0",
+        nodes_nstack_kotlin = '3.2.0'
+
 
     implementation 'javax.inject:javax.inject:1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -49,11 +53,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle"
 
+    implementation "dk.nodes.nstack:nstack-kotlin:$nodes_nstack_kotlin"
+
     implementation "com.google.dagger:dagger-android:$dagger"
     implementation "com.google.dagger:dagger-android-support:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
     kapt "com.google.dagger:dagger-android-processor:$dagger"
 
+    implementation "androidx.activity:activity-ktx:$activity_version"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     // Testing
     testImplementation 'com.github.gmazzo:okhttp-mock:1.3.2'

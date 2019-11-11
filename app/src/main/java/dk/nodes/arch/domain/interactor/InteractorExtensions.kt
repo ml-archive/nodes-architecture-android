@@ -2,8 +2,7 @@ package dk.nodes.arch.domain.interactor
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
@@ -16,7 +15,7 @@ interface FlowInteractor<I, O> : NoOutputInteractor<I> {
     fun flow(): Flow<InteractorResult<O>>
 }
 
-private class ResultInteractorImpl<I, O>(private val interactor: Interactor<I, out O>) :
+class ResultInteractorImpl<I, O>(private val interactor: Interactor<I, out O>) :
     ResultInteractor<I, O> {
     override suspend fun invoke(input: I): CompleteResult<O> {
         return try {
@@ -27,12 +26,10 @@ private class ResultInteractorImpl<I, O>(private val interactor: Interactor<I, o
     }
 }
 
-private class FlowInteractorImpl<I, O>(private val interactor: Interactor<I, out O>) :
+class FlowInteractorImpl<I, O>(private val interactor: Interactor<I, out O>) :
     FlowInteractor<I, O> {
 
-    private val channel = BroadcastChannel<InteractorResult<O>>(Channel.CONFLATED).also {
-        it.offer(Uninitialized)
-    }
+    private val channel = ConflatedBroadcastChannel<InteractorResult<O>>(Uninitialized)
 
     override fun flow(): Flow<InteractorResult<O>> {
         return channel.asFlow()

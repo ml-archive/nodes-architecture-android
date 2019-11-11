@@ -1,29 +1,36 @@
 package dk.nodes.arch.presentation
 
+import android.content.Context
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import dagger.android.support.DaggerFragment
-import dk.nodes.arch.extensions.getSharedViewModel
-import dk.nodes.arch.extensions.getViewModel
-import dk.nodes.arch.extensions.lifecycleAwareLazy
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-abstract class NodesFragment : DaggerFragment() {
+abstract class NodesFragment : Fragment, HasAndroidInjector {
+
+    constructor(contentResId: Int) : super(contentResId)
+    constructor() : super()
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    protected inline fun <reified VM : ViewModel> getViewModel(): VM =
-        getViewModel(viewModelFactory)
+    protected inline fun <reified VM : ViewModel> viewModel(): Lazy<VM> =
+        viewModels { viewModelFactory }
 
-    protected inline fun <reified VM : ViewModel> getSharedViewModel(): VM =
-        getSharedViewModel(viewModelFactory)
+    protected inline fun <reified VM : ViewModel> activityViewModel(): Lazy<VM> =
+        activityViewModels { viewModelFactory }
 
-    protected inline fun <reified VM : ViewModel> viewModel(): Lazy<VM> = lifecycleAwareLazy(this) {
-        getViewModel<VM>()
+    @Inject internal var androidInjector: DispatchingAndroidInjector<Any>? = null
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
-    protected inline fun <reified VM : ViewModel> sharedViewModel(): Lazy<VM> =
-        lifecycleAwareLazy(this) {
-            getSharedViewModel<VM>()
-        }
+    override fun androidInjector(): AndroidInjector<Any>? = androidInjector
 }
