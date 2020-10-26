@@ -19,7 +19,6 @@ class SharedElementHelper {
         transitionData[key] = data
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun addSharedElement(view: View) {
         sharedElementViews[WeakReference(view)] = view.transitionName
     }
@@ -56,7 +55,6 @@ fun sharedElements(vararg elements: kotlin.Pair<View, String>): SharedElementHel
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 fun sharedElements(vararg elements: View): SharedElementHelper {
     return SharedElementHelper().apply {
         elements.forEach {
@@ -65,7 +63,6 @@ fun sharedElements(vararg elements: View): SharedElementHelper {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 fun sharedElements(elements: List<View>): SharedElementHelper {
     return sharedElements(*elements.toTypedArray())
 }
